@@ -32,19 +32,22 @@ def train_linear_regression(x, y, learning_rate=0.01, epochs=100000):
 def save_model(theta0, theta1):
     np.save('model.npy', [theta0, theta1])
 
-def plot_data_and_line(x, y, theta0, theta1, xn, yn):
+def plot_data_and_line(x, y, theta0, theta1):
     
     # Tracer la chart du set de data
     plt.figure()
+    xn = denormalize(x, min_max_x[0], min_max_x[1])
+    yn = denormalize(y, min_max_y[0], min_max_y[1])
+    predicted_y = theta0 + theta1 * x
     plt.scatter(xn, yn, color='blue', label='Données réelles')
+    predicted_yn = denormalize(predicted_y, min_max_y[0], min_max_y[1])
+    plt.plot(xn, predicted_yn, color='red', label='Ligne de régression')
     plt.title("Set de Data")
     plt.legend()
-
 
     # Tracer la ligne de régression + chart normalized
     plt.figure()
     plt.scatter(x, y, color='blue', label='Données normalized')
-    predicted_y = theta0 + theta1 * x
     plt.plot(x, predicted_y, color='red', label='Ligne de régression')
     # Labels et titre
     plt.xlabel('Kilométrage (km)')
@@ -68,6 +71,6 @@ if __name__ == "__main__":
     
     theta0, theta1 = train_linear_regression(x, y)
     save_model(theta0, theta1)
-    plot_data_and_line(x, y, theta0, theta1, xtmp, ytmp)
+    plot_data_and_line(x, y, theta0, theta1)
     
     print(f"Modèle entraîné : theta0 = {theta0}, theta1 = {theta1}")
